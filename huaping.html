@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            margin:0;
+        }
+        ul{
+            margin:0;
+            padding:0;
+            list-style: none;;
+        }
+        #wrap{
+            height:100vh;
+            overflow: hidden;
+            border:5px solid #f00;
+            box-sizing: bordre-box;
+        }
+        #list{
+            transition: 0.3s;
+        }
+        #list li{
+            line-height: 50px;
+            font-size:24px;
+        }
+    </style>
+    <script src="./js/transform.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <ul id="list">
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+            <li><a href="#">一个连接</a></li>
+        </ul>
+    </div>
+    <script>
+        var wrap = document.querySelector("#wrap")
+        var list = document.querySelector('#list')
+
+        let startPointY = 0, //按下时手指的坐标
+            startTop = 0, // 按下时元素的距离
+            movePointY = 0 ; // 手指移动时的坐标
+
+        Transform(list); // 使用第三方，设置初始距离
+        wrap.addEventListener('touchstart',(ev)=>{
+            startPointY = ev.touches[0].pageY // 获取手指触碰时 html的坐标
+
+            startTop = list.translateY
+            
+        })
+        wrap.addEventListener('touchmove',(ev)=>{
+            movePointY = ev.touches[0].pageY - startPointY// 获取手指移的距离
+
+            // 元素走的距离 = 按下时的距离 + 坐标移动的距离
+            list.translateY = startTop + movePointY
+            ev.preventDefault()
+            
+        })
+
+
+        
+
+    </script>
+</body>
+</html>

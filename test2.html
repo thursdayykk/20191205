@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width:200px;
+            height:200px;
+            background:salmon;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script src="./js/setCSS3.js"></script>
+    <script>
+        // const css = (el,attr,value)=>{
+        //     // 有无value判断是获取还是设置
+        //     if(!value){ // 获取
+        //         if(attr === 'transform'){
+        //             value = getComputedStyle(el)[attr]
+        //         }else{
+        //             value = parseFloat(getComputedStyle(el)[attr])
+        //         }
+               
+        //         return value
+        //     }
+        //     if(attr === 'opacity'){
+        //         el.style[attr] = value  //透明度不加单位
+        //     }else{
+        //         el.style[attr] = value +'px' // 位置、大小
+        //     }
+
+        // }
+        const box = document.querySelector('div')
+        console.log(css(box,'opacity'),css(box,'scale'))
+        css(box,{width:200,opacity:0.2,scale:2})
+        console.log(css(box,'opacity'),css(box,'scale'))
+
+
+    </script>
+
+</body>
+</html>

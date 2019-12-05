@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            margin:0;
+        }
+        #wrap{
+            height:100vh;
+            overflow: hidden;
+        }
+        ul{
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+        .banner{
+            height:20vh;
+            box-sizing: border-box;
+            border:1px solid #00f;
+            overflow: hidden;
+        }
+        .banner ul{
+            width:400vw;
+            height:100%;
+        }
+        .banner li{
+            height:100%;
+            float: left;
+            box-sizing:border-box;
+            border-right: 1px solid #fff;
+        }
+        .banner ul li a{
+            text-decoration: none;
+            display: block;
+            width:100vw;
+            height:100%;
+            line-height: 200%;
+            text-align: center;
+            font-size:50px;
+            color:#fff;
+            background:goldenrod;
+
+        }
+        .list{
+            height:100vh;
+            overflow: hidden;
+            background:#ccc;
+            border:1px solid #f00;
+            box-sizing: border-box;
+        }
+        .list li{
+            font-size:30px;
+            line-height:40px;
+        }
+    </style>
+    <script src="./js/setCSS3.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <div class="banner">
+            <ul>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+            </ul>
+        </div>
+        <div class="list">
+            <ul></ul>
+        </div>
+    </div>
+    <script>
+        const ul = document.querySelector('.list ul')
+        for(let i =0;i< 30;i++){
+            let li = document.createElement('li')
+            li.innerHTML = `<a href="#">这是一个很长很长的列表${i}</a>`
+            ul.appendChild(li)
+        }
+
+        const swiper = ({wrap,dir='y',start,end}) => {
+            const scroll = wrap.children[0]  // y要滑动的元素
+            let startPoint = {} ,// 手指按下的位置
+                startEle = {} ,// 元素初始的位置
+                distance = {} , // 移动的差值
+                targetEle = {}; // 元素拖动后的位置
+                
+            let isDir = {   // 用来决定用户现在拖动的方向
+                x:false,
+                y:false
+            },
+            isFirstMove = true; // 用户是否第一次滑动
+
+            // 如果用户只点击 则不走move里面的代码
+            // 如何判断用户是否只是点击？上一次手指跟当前手指坐标对比
+            let curPoint = {} , //当前手指坐标
+                lastPoint = {} ; // 上一次手指坐标
+            
+            wrap.addEventListener('touchstart',ev => {
+                start && start.call(wrap,ev) // 按下时的回调函数
+
+                startPoint = {
+                    x:ev.changedTouches[0].pageX,
+                    y:ev.changedTouches[0].pageY
+                }
+
+                // 在手指一上来按下就需要跟新lastPoint
+
+                lastPoint = {
+                    x:ev.changedTouches[0].pageX,
+                    y:ev.changedTouches[0].pageY
+                }
+
+                startEle = {
+                    x:css(scroll,'translateX'),
+                    y:css(scroll,'translateY')
+                }
+
+            })
+
+            wrap.addEventListener('touchmove',ev => {
+                // 当前移动的坐标
+                curPoint = {
+                    x:ev.changedTouches[0].pageX,
+                    y:ev.changedTouches[0].pageY
+                }
+
+                // 如果上次坐标与这次坐标一样，说明手指并没有移动，可以认为用户误触
+                if(lastPoint.x === curPoint.x && lastPoint.y === curPoint.y){
+                    return
+                }
+                
+                // 滑动的距离 = 当前手指的位置 - 开始按下的位置 
+                distance = {
+                    x:ev.changedTouches[0].pageX - startPoint.x,
+                    y:ev.changedTouches[0].pageY - startPoint.y
+                }
+
+                targetEle = {
+                    x:startEle.x + distance.x,
+                    y:startEle.y + distance.y 
+                }
+                
+                // 先判断用户是否是第一次拖动
+                if(isFirstMove){
+                    // x轴偏移距离 > y轴时
+                    if(Math.abs(distance.x) > Math.abs(distance.y)){
+                        // 左右的方向拖动
+                        isDir.x = true
+                        isDir.y = isFirstMove = false
+                    }else{
+                        // 上下拖动
+                        isDir.y = true
+                        isDir.x = isFirstMove = false
+                    }
+                }
+
+                if(isDir[dir]){
+                    css(scroll,{['translate' + dir.toUpperCase()]:targetEle[dir]})
+                    ev.preventDfault()
+                }
+
+                // 更新上一次的坐标
+                lastPointx = curPoint.x
+                lastPoint.y = curPoint.y
+
+
+            })
+
+            // 在手指抬起时还原成默认值
+            wrap.addEventListener('touchend',ev => {
+                end && end.call(wrap,ev)
+
+                isFirstMove = true
+                isDir = {
+                    x:false,
+                    y:false
+                }
+            })
+        }
+
+        const list = document.querySelector('.list')
+        swiper({
+            wrap:list
+        })
+
+        swiper({
+            wrap:document.querySelector('.banner'),
+            dir:'x'
+        })
+    </script>
+</body>
+</html>
